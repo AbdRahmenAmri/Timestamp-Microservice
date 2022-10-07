@@ -31,6 +31,7 @@ app.get("/api", (req, res) => {
 
 app.get("/api/:date", (req, res) => {
     var date = new Number(req.params.date);
+    console.log(new Date(Date.parse(req.params.date)).toISOString().split('T')[0]);
     console.log(req.params.date);
     if (!isNaN(date)) {
 
@@ -49,8 +50,15 @@ app.get("/api/:date", (req, res) => {
             unix: unix,
             utc: utc
         })
+    } else if(dateIsValid(new Date(Date.parse(req.params.date)).toISOString().split('T')[0])) {
+        date = new Date(Date.parse(req.params.date))
+        let unix = date.getTime();
+        let utc = date.toUTCString();
+        res.json({
+            unix: unix,
+            utc: utc
+        })
     } else {
-
         res.json({
             error: 'Invalid Date'
         })
